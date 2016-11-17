@@ -13,10 +13,12 @@ public class PlayerScript : MonoBehaviour {
     public int maxHealth = 5;
     public int curHealth = 5;
 
+    public bool movementLeft = false;
+
     public List<Sprite> heartsSprites;
     public Image heartsUI;
 
-    private List<Collider2D> InteractItems = new List<Collider2D>();
+    private List<InteractiveScript> InteractItems = new List<InteractiveScript>();
     #endregion
 
 
@@ -33,6 +35,12 @@ public class PlayerScript : MonoBehaviour {
         moveX = Input.GetAxis("Horizontal");
         moveY = Input.GetAxis("Vertical");
 
+        // Check if object move and flip sprite if it moves to left
+        if (moveX != 0)
+        {
+            this.gameObject.GetComponent<SpriteRenderer>().flipX = movementLeft = moveX < 0;
+        }
+
         if (Input.GetKeyDown(KeyCode.E) && InteractItems.Count > 0) Interact();
         
 	}
@@ -47,8 +55,9 @@ public class PlayerScript : MonoBehaviour {
         var interact = other.gameObject.GetComponent<InteractiveScript>();
         if (interact != null)
         {
-            InteractItems.Add(other);
+            InteractItems.Add(interact);
             GameObject.FindObjectOfType<LevelScript>().tooltipPanel.SetActive(true);
+            GameObject.Find("TextTarget").GetComponent<Text>().text = InteractItems[0].description;
         }
     }
 
@@ -57,7 +66,7 @@ public class PlayerScript : MonoBehaviour {
         var interact = other.gameObject.GetComponent<InteractiveScript>();
         if (interact != null)
         {
-            InteractItems.Remove(other);
+            InteractItems.Remove(interact);
             if(InteractItems.Count == 0) GameObject.FindObjectOfType<LevelScript>().tooltipPanel.SetActive(false);
         }
     }

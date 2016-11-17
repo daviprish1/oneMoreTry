@@ -10,6 +10,7 @@ abstract public class InteractiveScript : MonoBehaviour, IInteractive
 {
     #region Variables
     public GameObject destination = null;
+    public string description = "";
     #endregion
 
 
