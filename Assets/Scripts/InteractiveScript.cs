@@ -9,7 +9,7 @@ using UnityEngine;
 abstract public class InteractiveScript : MonoBehaviour, IInteractive
 {
     #region Variables
-    public GameObject destination = null;
+    public GameObject destination = null;               //need if this interact allow u to travel by 2 waypoints
     public string description = "";
     #endregion
 
@@ -32,6 +32,6 @@ abstract public class InteractiveScript : MonoBehaviour, IInteractive
 
 
     #region Support functionality
-    public abstract void Interact(GameObject target);
+    public abstract void Interact(GameObject target);   //override in inherit classes
     #endregion
 }

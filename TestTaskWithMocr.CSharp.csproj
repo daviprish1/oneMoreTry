@@ -75,6 +75,8 @@
     <Compile Include="Assets\Scripts\StairsInteractScript.cs" />
     <Compile Include="Assets\Scripts\SupportItems\Enums.cs" />
     <Compile Include="Assets\Scripts\SupportItems\IInteractive.cs" />
+    <Compile Include="Assets\Scripts\WeaponInteractScript.cs" />
+    <Compile Include="Assets\Scripts\WeaponScript.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>
