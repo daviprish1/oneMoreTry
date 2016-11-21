@@ -19,6 +19,7 @@ public class CameraFollowScript : MonoBehaviour {
     // Use this for initialization
     void Start () {
         offset = new Vector3(0, 0, -10);   
+		DontDestroyOnLoad (this);
     }
 	
 	// Update is called once per frame
@@ -29,7 +30,7 @@ public class CameraFollowScript : MonoBehaviour {
     //Called after Update()
     void LateUpdate()
     {
-        transform.position = target.transform.position + offset;
+        if(target != null) transform.position = target.transform.position + offset;
     }
     #endregion
 }

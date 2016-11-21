@@ -18,6 +18,7 @@ public class PlayerScript : MonoBehaviour {
     public List<Sprite> heartsSprites;                              //collection of sprites which present your current health condition
     public Image heartsUI;                                          //ref to ui what show one of the health sprites to the player
 
+    private InteractiveScript curInteract = null;
     private List<InteractiveScript> InteractItems = new List<InteractiveScript>();      //list of all interactive items in area where u can interact with them
 
     public WeaponScript curWeapon = null;                           //current player weapon
@@ -28,7 +29,7 @@ public class PlayerScript : MonoBehaviour {
     #region Unity functionality
     // Use this for initialization
     void Start () {
-	
+		DontDestroyOnLoad (this);
 	}
 	
 	// Update is called once per frame
@@ -42,11 +43,26 @@ public class PlayerScript : MonoBehaviour {
         // Check if object move and flip sprite if it moves to left
         if (moveX != 0)
         {
-            this.gameObject.GetComponent<SpriteRenderer>().flipX = movementLeft = moveX < 0;
+			if (moveX > 0)
+			{
+				movementLeft = false;
+				transform.localRotation = Quaternion.Euler(0, 0, 0);
+			}
+			else
+			{
+				movementLeft = true;
+				transform.localRotation = Quaternion.Euler(0, 180, 0);
+			}
         }
+
+        if (Input.GetKeyDown(KeyCode.Tab)) ChangeInteractTarget();
 
         //interact with items by pressing E (if this items exist)
         if (Input.GetKeyDown(KeyCode.E) && InteractItems.Count > 0) Interact();
+
+		//basic shooting script. Shoot() parameter should be weapon desc variable
+		if (Input.GetButton ("Fire1") && curWeapon != null)
+			curWeapon.GetComponent<WeaponScript> ().Shoot();
 
         //switch weapons
         if (Input.GetAxis("Mouse ScrollWheel") != 0f) SwitchWeapon(Input.GetAxis("Mouse ScrollWheel") > 0f);
@@ -65,9 +81,10 @@ public class PlayerScript : MonoBehaviour {
         var interact = other.gameObject.GetComponent<InteractiveScript>();
         if (interact != null)   //check if this item exists
         {
+            if (InteractItems.Count == 0) curInteract = interact;
             InteractItems.Add(interact);                                                            //add to interacted item collection
             GameObject.FindObjectOfType<LevelScript>().tooltipPanel.SetActive(true);                //show tooltip about potential interaction
-            GameObject.Find("TextTarget").GetComponent<Text>().text = InteractItems[0].description; //show description about interaction
+            GameObject.Find("TextTarget").GetComponent<Text>().text = curInteract.description;      //show description about interaction
         }
     }
 
@@ -78,10 +95,13 @@ public class PlayerScript : MonoBehaviour {
         if (interact != null)
         {
             InteractItems.Remove(interact);                                                             //remove first item from collection
-            if(InteractItems.Count == 0)
+            if (InteractItems.Count == 0)
                 GameObject.FindObjectOfType<LevelScript>().tooltipPanel.SetActive(false);               //if collectin is empty hide tooltip panel
             else
-                GameObject.Find("TextTarget").GetComponent<Text>().text = InteractItems[0].description; //or show next element description
+            {
+                curInteract = InteractItems[0];
+                GameObject.Find("TextTarget").GetComponent<Text>().text = curInteract.description;      //or show next element description
+            }
         }
     }
     #endregion
@@ -89,7 +109,7 @@ public class PlayerScript : MonoBehaviour {
 
     #region Support functionality
     //function for harm pity plater
-    private void Damage(int dmg)
+    public void Damage(int dmg)
     {
         this.curHealth -= dmg;
         if (curHealth <= 0)                                         //If player health all gone
@@ -102,7 +122,7 @@ public class PlayerScript : MonoBehaviour {
     //function for interaction
     private void Interact()
     {
-        InteractItems[0].gameObject.GetComponent<InteractiveScript>().Interact(this.gameObject);        //just interact with first item in interactive collection
+        curInteract.Interact(this.gameObject);                                  //just interact with first item in interactive collection
     }
 
     //for swithcing weapons
@@ -130,7 +150,16 @@ public class PlayerScript : MonoBehaviour {
         if (curWeapon == null) return;
 
         curWeapon.transform.position = gameObject.transform.position;
-        curWeapon.GetComponent<SpriteRenderer>().flipX = movementLeft;
+    }
+
+    private void ChangeInteractTarget()
+    {
+        if (InteractItems.Count <= 1) return;
+        int idx = InteractItems.IndexOf(curInteract);
+        if (idx == InteractItems.Count - 1) idx = 0;
+        else idx++;
+        curInteract = InteractItems[idx];
+        GameObject.Find("TextTarget").GetComponent<Text>().text = curInteract.description;
     }
     #endregion
 }

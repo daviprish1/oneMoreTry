@@ -20,6 +20,7 @@ public class LevelScript : MonoBehaviour {
         timerTimeLeft = timerMaxTime;
         isTextResultChanged = false;        
         tooltipPanel.SetActive(false);
+
     }
 	
 	// Update is called once per frame

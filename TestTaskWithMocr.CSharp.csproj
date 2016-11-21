@@ -66,12 +66,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\AggroZone.cs" />
+    <Compile Include="Assets\Scripts\AttackZoneScript.cs" />
     <Compile Include="Assets\Scripts\CameraFollowScript.cs" />
     <Compile Include="Assets\Scripts\DoorsInteractScript.cs" />
+    <Compile Include="Assets\Scripts\EnemyScript.cs" />
     <Compile Include="Assets\Scripts\InteractiveScript.cs" />
     <Compile Include="Assets\Scripts\LevelScript.cs" />
     <Compile Include="Assets\Scripts\MedicineInteractScript.cs" />
     <Compile Include="Assets\Scripts\PlayerScript.cs" />
+    <Compile Include="Assets\Scripts\ProjectilePhysics.cs" />
     <Compile Include="Assets\Scripts\StairsInteractScript.cs" />
     <Compile Include="Assets\Scripts\SupportItems\Enums.cs" />
     <Compile Include="Assets\Scripts\SupportItems\IInteractive.cs" />
