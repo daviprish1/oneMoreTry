@@ -74,6 +74,7 @@
     <Compile Include="Assets\Scripts\InteractiveScript.cs" />
     <Compile Include="Assets\Scripts\LevelScript.cs" />
     <Compile Include="Assets\Scripts\MedicineInteractScript.cs" />
+    <Compile Include="Assets\Scripts\MovementScript.cs" />
     <Compile Include="Assets\Scripts\PlayerScript.cs" />
     <Compile Include="Assets\Scripts\ProjectilePhysics.cs" />
     <Compile Include="Assets\Scripts\StairsInteractScript.cs" />

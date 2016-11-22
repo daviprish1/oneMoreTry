@@ -3,13 +3,10 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public class PlayerScript : MonoBehaviour {
+public class PlayerScript : MovementScript
+{
 
     #region variables
-    public float Speed = 0f;                                        //player speed
-    private float moveX = 0f;                                       //x direction
-    private float moveY = 0f;                                       //y direction
-
     public int maxHealth = 5;
     public int curHealth = 5;
 
@@ -28,12 +25,14 @@ public class PlayerScript : MonoBehaviour {
 
     #region Unity functionality
     // Use this for initialization
-    void Start () {
-		DontDestroyOnLoad (this);
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    protected override void Start()
+    {
+        DontDestroyOnLoad(this);
+    }
+
+    // Update is called once per frame
+    protected override void Update()
+    {
         heartsUI.sprite = heartsSprites[this.curHealth];            //update health ui
         UpdateCurWeapon();                                          //update current weapon position
 
@@ -41,37 +40,34 @@ public class PlayerScript : MonoBehaviour {
         moveY = Input.GetAxis("Vertical");
 
         // Check if object move and flip sprite if it moves to left
-        if (moveX != 0)
+        if (moveX > 0)
         {
-			if (moveX > 0)
-			{
-				movementLeft = false;
-				transform.localRotation = Quaternion.Euler(0, 0, 0);
-			}
-			else
-			{
-				movementLeft = true;
-				transform.localRotation = Quaternion.Euler(0, 180, 0);
-			}
+            movementLeft = false;
+            transform.localRotation = Quaternion.Euler(0, 0, 0);
         }
+        else if(moveX < 0)
+        {
+            movementLeft = true;
+            transform.localRotation = Quaternion.Euler(0, 180, 0);
+        }
+
 
         if (Input.GetKeyDown(KeyCode.Tab)) ChangeInteractTarget();
 
         //interact with items by pressing E (if this items exist)
         if (Input.GetKeyDown(KeyCode.E) && InteractItems.Count > 0) Interact();
 
-		//basic shooting script. Shoot() parameter should be weapon desc variable
-		if (Input.GetButton ("Fire1") && curWeapon != null)
-			curWeapon.GetComponent<WeaponScript> ().Shoot();
+        //basic shooting script. Shoot() parameter should be weapon desc variable
+        if (Input.GetButton("Fire1") && curWeapon != null)
+            curWeapon.GetComponent<WeaponScript>().Shoot();
 
         //switch weapons
         if (Input.GetAxis("Mouse ScrollWheel") != 0f) SwitchWeapon(Input.GetAxis("Mouse ScrollWheel") > 0f);
     }
 
-    void FixedUpdate()
+    protected override void FixedUpdate()
     {
-        //move player sprite
-        this.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(moveX * Speed, moveY * Speed);
+        base.FixedUpdate();
     }
 
     //event rised where player enter into another body with collider and trigger

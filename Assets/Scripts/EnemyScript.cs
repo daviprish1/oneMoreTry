@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemyScript : MonoBehaviour
+public class EnemyScript : MovementScript
 {
     #region Variables
     private GameObject target;
@@ -10,11 +10,8 @@ public class EnemyScript : MonoBehaviour
     public int curHealth = 0;
     public int damage = 1;
 
-    public Vector2 speed = new Vector2(8, 6);
-    public Vector2 direction = new Vector2(1, 0);
     public bool movementLeft = false;
 
-    private Vector2 movement = new Vector2();
     private Rigidbody2D rigidbodyComponent;
 
     public bool itsTriggered = false;
@@ -23,7 +20,7 @@ public class EnemyScript : MonoBehaviour
 
     #region Unity
     // Use this for initialization
-    void Start()
+    protected override void Start()
     {
         //DontDestroyOnLoad(gameObject);
         curHealth = maxHealth;
@@ -31,42 +28,35 @@ public class EnemyScript : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
         if (itsTriggered && target != null)
         {
             Transform plTransform = target.GetComponent<Transform>();
             Transform oTransform = gameObject.GetComponent<Transform>();
-            direction.x = plTransform.position.x < oTransform.position.x ? -1 : 1;
-            direction.y = plTransform.position.y < oTransform.position.y ? -1 : 1;
+            moveX = plTransform.position.x < oTransform.position.x ? -1 : 1;
+            moveY = plTransform.position.y < oTransform.position.y ? -1 : 1;
 
-            if (direction.x != 0)
+            if (moveX > 0)
             {
-                if (direction.x > 0)
-                {
-                    movementLeft = false;
-                    transform.localRotation = Quaternion.Euler(0, 0, 0);
-                }
-                else
-                {
-                    movementLeft = true;
-                    transform.localRotation = Quaternion.Euler(0, 180, 0);
-                }
+                movementLeft = false;
+                transform.localRotation = Quaternion.Euler(0, 0, 0);
+            }
+            else if (moveX < 0)
+            {
+                movementLeft = true;
+                transform.localRotation = Quaternion.Euler(0, 180, 0);
             }
 
-            movement = new Vector2(
-              speed.x * direction.x,
-              speed.y * direction.y);
         }
-        
+
     }
 
-    void FixedUpdate()
+    protected override void FixedUpdate()
     {
         if (rigidbodyComponent == null) rigidbodyComponent = GetComponent<Rigidbody2D>();
 
-        rigidbodyComponent.velocity = movement;
-        movement = new Vector2();
+        if (itsTriggered && target != null) base.FixedUpdate();
     }
 
     void OnTriggerEnter2D(Collider2D otherCollider)

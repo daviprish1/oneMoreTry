@@ -85,9 +85,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb4a0f1fcf666cb45933c99824904dbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 4
+  speedX: 5
+  speedY: 5
   maxHealth: 5
   curHealth: 5
+  movementLeft: 0
   heartsSprites:
   - {fileID: 21300010, guid: c2199bff6eeb8ca48972339a618f7468, type: 3}
   - {fileID: 21300008, guid: c2199bff6eeb8ca48972339a618f7468, type: 3}
@@ -96,6 +98,8 @@ MonoBehaviour:
   - {fileID: 21300002, guid: c2199bff6eeb8ca48972339a618f7468, type: 3}
   - {fileID: 21300000, guid: c2199bff6eeb8ca48972339a618f7468, type: 3}
   heartsUI: {fileID: 0}
+  curWeapon: {fileID: 0}
+  weapons: []
 --- !u!212 &212000012248779932
 SpriteRenderer:
   m_ObjectHideFlags: 1

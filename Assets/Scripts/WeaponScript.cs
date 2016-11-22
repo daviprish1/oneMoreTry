@@ -13,6 +13,7 @@ public class WeaponScript : MonoBehaviour {
     private float shootCooldown = 0;
 	private Transform muzzleRef; 
 	private float ctime;
+
     #endregion
 
     // Use this for initialization
@@ -29,8 +30,10 @@ public class WeaponScript : MonoBehaviour {
 		if (ctime > shootCooldown) {			
 			var bullet = Instantiate(shotPrefab, transform.FindChild("Muzzle").position, transform.FindChild("Muzzle").rotation) as Transform;
             bullet.gameObject.GetComponent<ProjectilePhysics>().damage = damage;				
-			shootCooldown = ctime + shootingRate;	
-		}
+			shootCooldown = ctime + shootingRate;
+            var asrc = GetComponent<AudioSource>();
+            if (asrc != null) asrc.Play();
+        }
 	}
 
 }
